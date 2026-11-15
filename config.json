@@ -1,0 +1,68 @@
+{
+  "siteName": "TurboPasión",
+  "tagline": "Las noticias del motor, al minuto",
+  "description": "TurboPasión reúne las últimas noticias del mundo del automóvil: lanzamientos, coches eléctricos, deportivos, SUV, competición e industria, actualizadas cada hora.",
+  "siteUrl": "",
+  "contactEmail": "contacto@tudominio.com",
+  "language": "es",
+
+  "adsense": {
+    "client": "",
+    "slots": {
+      "top": "",
+      "infeed": "",
+      "bottom": "",
+      "article": ""
+    },
+    "showPlaceholders": true
+  },
+
+  "itemsPerPage": 24,
+  "maxPages": 8,
+  "maxPerSource": 25,
+  "excerptLength": 170,
+  "showImages": true,
+
+  "feeds": [
+    { "name": "Motorpasión", "url": "https://www.motorpasion.com/index.xml" },
+    { "name": "Motorpasión México", "url": "https://www.motorpasion.com.mx/index.xml" },
+    { "name": "Diariomotor", "url": "https://www.diariomotor.com/feed/" },
+    { "name": "Motor.es", "url": "https://www.motor.es/feed/" },
+    { "name": "Auto Bild", "url": "https://www.autobild.es/rss" },
+    { "name": "Motor1", "url": "https://es.motor1.com/rss/news/all/" },
+    { "name": "Car and Driver", "url": "https://www.caranddriver.com/es/rss/all.xml/" },
+    { "name": "Top Gear", "url": "https://www.topgear.es/rss" },
+    { "name": "Forococheseléctricos", "url": "https://forococheselectricos.com/feed" },
+    { "name": "Actualidad Motor", "url": "https://www.actualidadmotor.com/feed/" },
+    { "name": "Xataka", "url": "https://www.xataka.com/tag/coches/rss2.xml" }
+  ],
+
+  "categories": [
+    {
+      "slug": "competicion",
+      "name": "Competición",
+      "keywords": ["f1", "formula 1", "formula e", "motogp", "rally", "wrc", "le mans", "dakar", "gran premio", "indycar", "nascar", "wec", "verstappen", "hamilton", "alonso", "sainz", "leclerc", "piloto", "parrilla", "pole"]
+    },
+    {
+      "slug": "electricos",
+      "name": "Eléctricos",
+      "keywords": ["electrico", "electricos", "electrica", "electricas", "hibrido", "hibridos", "enchufable", "bateria", "baterias", "autonomia", "recarga", "cargador", "tesla", "byd", "kwh", "ev", "phev", "hidrogeno"]
+    },
+    {
+      "slug": "deportivos",
+      "name": "Deportivos",
+      "keywords": ["deportivo", "deportivos", "superdeportivo", "hiperdeportivo", "hypercar", "ferrari", "lamborghini", "porsche", "mclaren", "bugatti", "pagani", "koenigsegg", "aston martin", "gt3", "nurburgring", "v8", "v12", "cv"]
+    },
+    {
+      "slug": "suv",
+      "name": "SUV y 4x4",
+      "keywords": ["suv", "todoterreno", "todocamino", "4x4", "pick-up", "pickup", "crossover", "camioneta", "off-road"]
+    },
+    {
+      "slug": "industria",
+      "name": "Industria",
+      "keywords": ["ventas", "fabrica", "fabricas", "aranceles", "arancel", "mercado", "dgt", "normativa", "multa", "multas", "radar", "radares", "impuesto", "matriculaciones", "despidos", "produccion", "gasolina", "diesel", "combustible", "itv", "seguro"]
+    }
+  ],
+  "defaultCategory": { "slug": "novedades", "name": "Novedades" }
+}
