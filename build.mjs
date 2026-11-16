@@ -185,6 +185,7 @@ async function loadPosts() {
       title: meta.title || f.replace(/\.md$/, ''),
       description: meta.description || truncate(clean(stripTags(markdown(body))), 160),
       image: meta.image || '',
+      author: meta.author || cfg.author || cfg.siteName,
       date: isNaN(date) ? BUILD_DATE : date,
       html: markdown(body),
     });
@@ -211,7 +212,7 @@ function ad(slotName) {
 
 const FAVICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e10600'/%3E%3Cpath d='M14 18h36l-3 9H37l-7 21H19l7-21H11z' fill='%23fff'/%3E%3C/svg%3E";
 
-function layout({ title, description, file, active = '', body, ogImage = '', ogType = 'website', jsonLd = null }) {
+function layout({ title, description, file, active = '', body, ogImage = '', ogType = 'website', jsonLd = null, author = '' }) {
   const fullTitle = title ? `${title} | ${cfg.siteName}` : `${cfg.siteName} — ${cfg.tagline}`;
   const canonical = SITE_URL ? `${SITE_URL}/${file === 'index.html' ? '' : file}` : '';
   const nav = [{ slug: '', name: 'Portada', href: 'index.html' },
@@ -231,6 +232,7 @@ ${canonical ? `<link rel="canonical" href="${esc(canonical)}">` : ''}
 <meta property="og:type" content="${esc(ogType)}">
 <meta property="og:locale" content="es_MX">
 ${canonical ? `<meta property="og:url" content="${esc(canonical)}">` : ''}
+${author ? `<meta name="author" content="${esc(author)}">` : ''}
 <meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}">
 <meta name="robots" content="max-image-preview:large">
 ${SITE_URL ? `<link rel="alternate" type="application/rss+xml" title="${esc(cfg.siteName)}: artículos" href="${esc(SITE_URL)}/feed.xml">` : ''}
@@ -326,7 +328,7 @@ function postCard(p) {
       <span class="chip chip--own">TurboPasión</span>
       <h3 class="card__title">${esc(p.title)}</h3>
       <p class="card__excerpt">${esc(p.description)}</p>
-      <p class="card__meta"><span class="source">Leer artículo →</span><time datetime="${p.date.toISOString()}">${fmtDate(p.date)}</time></p>
+      <p class="card__meta"><span class="source">Por ${esc(p.author)}</span><time datetime="${p.date.toISOString()}">${fmtDate(p.date)}</time></p>
     </div>
   </a>
 </article>`;
@@ -419,23 +421,34 @@ ${ad('bottom')}`;
 }
 
 // Artículos propios
+function shareLinks(p) {
+  if (!SITE_URL) return '';
+  const url = encodeURIComponent(`${SITE_URL}/post-${p.slug}.html`);
+  const text = encodeURIComponent(p.title);
+  return `<p class="share"><span class="muted">Compartir:</span>
+  <a href="https://wa.me/?text=${text}%20${url}" target="_blank" rel="noopener">WhatsApp</a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" rel="noopener">Facebook</a>
+  <a href="https://twitter.com/intent/tweet?text=${text}&amp;url=${url}" target="_blank" rel="noopener">X</a>
+  <a href="https://t.me/share/url?url=${url}&amp;text=${text}" target="_blank" rel="noopener">Telegram</a></p>`;
+}
 for (const p of posts) {
   const body = `<article class="prose">
 <p class="chip chip--own">TurboPasión</p>
 <h1>${esc(p.title)}</h1>
-<p class="muted">${fmtDate(p.date)}</p>
+<p class="muted byline">Por <a href="acerca.html" rel="author">${esc(p.author)}</a> · ${fmtDate(p.date)}</p>
 ${p.image ? `<figure><img src="${esc(p.image)}" alt=""></figure>` : ''}
 ${ad('article')}
 ${p.html}
+${shareLinks(p)}
 ${ad('bottom')}
 </article>
 ${posts.length > 1 ? `<section><h2 class="section-title">Más de la redacción</h2><div class="grid grid--posts">${posts.filter((o) => o !== p).slice(0, 3).map(postCard).join('\n')}</div></section>` : ''}`;
   await write(`post-${p.slug}.html`, layout({
-    title: p.title, description: p.description, file: `post-${p.slug}.html`, active: 'redaccion', body, ogImage: p.image, ogType: 'article',
+    title: p.title, description: p.description, file: `post-${p.slug}.html`, active: 'redaccion', body, ogImage: p.image, ogType: 'article', author: p.author,
     jsonLd: {
       '@context': 'https://schema.org', '@type': 'Article', headline: p.title, description: p.description, inLanguage: cfg.language,
       datePublished: p.date.toISOString(), dateModified: p.date.toISOString(),
-      author: { '@type': 'Organization', name: cfg.siteName }, publisher: { '@type': 'Organization', name: cfg.siteName },
+      author: p.author === cfg.siteName ? { '@type': 'Organization', name: cfg.siteName } : { '@type': 'Person', name: p.author, ...(SITE_URL ? { url: SITE_URL + '/acerca.html' } : {}) }, publisher: { '@type': 'Organization', name: cfg.siteName },
       ...(p.image ? { image: p.image } : {}),
       ...(SITE_URL ? { mainEntityOfPage: `${SITE_URL}/post-${p.slug}.html` } : {}),
     },
@@ -472,6 +485,8 @@ const pages = {
 <h2>Cómo funciona</h2>
 <p>El sitio se actualiza automáticamente cada hora. Leemos los canales RSS públicos de medios especializados (${sources}) y mostramos el titular, un breve extracto y el enlace a la noticia original. Para leer la noticia completa siempre se visita el medio que la publicó.</p>
 <p>Además publicamos artículos propios en la sección «De la redacción».</p>
+${cfg.author ? `<h2>Quién escribe</h2>
+<p>Los artículos propios de ${esc(cfg.siteName)} los firma <strong>${esc(cfg.author)}</strong>, editor del sitio. Se elaboran a partir de información pública de armadoras, organismos del sector y medios especializados, se redactan con palabras propias y enlazan sus fuentes al final de cada texto.</p>` : ''}
 <h2>Contacto</h2>
 <p>¿Sugerencias, correcciones o quieres que retiremos tu medio? Escríbenos a <a href="mailto:${mail}">${mail}</a>.</p>`],
   'contacto.html': ['Contacto', `

@@ -141,3 +141,8 @@ h1.section-title { margin-top: 0; font-size: 1.5rem; }
 .prose ol { padding-left: 1.3em; }
 
 .site-footer__social { font-weight: 700; }
+
+.byline a { color: inherit; font-weight: 700; }
+
+.share { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin: 28px 0; font-weight: 700; }
+.share a { color: var(--accent-2); }
