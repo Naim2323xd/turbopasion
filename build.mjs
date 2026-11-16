@@ -102,7 +102,7 @@ function parseFeed(xml, source) {
       image = safeUrl(image.trim()).replace(/^http:/, 'https:');
     }
 
-    items.push({ title, link, date, excerpt, image, source: source.name });
+    items.push({ title, link, date, excerpt, image, source: source.name, forceCategory: source.category || '' });
   }
   return items;
 }
@@ -114,7 +114,10 @@ async function fetchFeed(source) {
       signal: AbortSignal.timeout(20000),
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    const items = parseFeed(await res.text(), source)
+    // Algunos medios publican el RSS en UTF-16: se detecta por los bytes nulos del inicio
+    const buf = new Uint8Array(await res.arrayBuffer());
+    const enc = buf[0] === 0xfe && buf[1] === 0xff ? 'utf-16be' : (buf[0] === 0xff && buf[1] === 0xfe) || buf[1] === 0 ? 'utf-16le' : 'utf-8';
+    const items = parseFeed(new TextDecoder(enc).decode(buf), source)
       .sort((a, b) => b.date - a.date)
       .slice(0, cfg.maxPerSource);
     console.log(`  ✓ ${source.name}: ${items.length} noticias`);
@@ -224,7 +227,7 @@ ${canonical ? `<link rel="canonical" href="${esc(canonical)}">` : ''}
 <meta property="og:title" content="${esc(fullTitle)}">
 <meta property="og:description" content="${esc(description || cfg.description)}">
 <meta property="og:type" content="${esc(ogType)}">
-<meta property="og:locale" content="es_ES">
+<meta property="og:locale" content="es_MX">
 ${canonical ? `<meta property="og:url" content="${esc(canonical)}">` : ''}
 <meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}">
 <meta name="robots" content="max-image-preview:large">
@@ -351,7 +354,7 @@ for (const it of fetched.sort((a, b) => b.date - a.date)) {
   const kTitle = normalize(it.title);
   if (seen.has(kLink) || seen.has(kTitle)) continue;
   seen.add(kLink); seen.add(kTitle);
-  it.category = categorize(it);
+  it.category = cfg.categories.find((c) => c.slug === it.forceCategory) || categorize(it);
   items.push(it);
 }
 if (items.length === 0) {
@@ -461,7 +464,7 @@ const mail = esc(cfg.contactEmail);
 const sources = cfg.feeds.map((f) => esc(f.name)).join(', ');
 const pages = {
   'acerca.html': ['Acerca de ' + cfg.siteName, `
-<p>${esc(cfg.siteName)} es un punto de encuentro para quienes viven el motor. Reunimos en una sola página los titulares más recientes sobre lanzamientos, coches eléctricos, deportivos, SUV, competición e industria del automóvil.</p>
+<p>${esc(cfg.siteName)} es un punto de encuentro para quienes viven el motor en México. Reunimos en una sola página los titulares más recientes sobre autos y motos en México: modelos que llegan al país, precios y financiamiento, eléctricos, SUV y pickups, e industria automotriz.</p>
 <h2>Cómo funciona</h2>
 <p>El sitio se actualiza automáticamente cada hora. Leemos los canales RSS públicos de medios especializados (${sources}) y mostramos el titular, un breve extracto y el enlace a la noticia original. Para leer la noticia completa siempre se visita el medio que la publicó.</p>
 <p>Además publicamos artículos propios en la sección «De la redacción».</p>

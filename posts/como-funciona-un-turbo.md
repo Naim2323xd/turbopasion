@@ -1,10 +1,10 @@
 ---
 title: Cómo funciona un turbo, explicado sin tecnicismos
 date: 2026-11-16
-description: Qué hace exactamente el turbocompresor, por qué casi todos los coches nuevos llevan uno y cómo cuidarlo para que dure.
+description: Qué hace exactamente el turbocompresor, por qué casi todos los autos nuevos llevan uno y cómo cuidarlo para que dure.
 ---
 
-Casi todos los coches nuevos, de gasolina o diésel, llevan turbo. Ya no es cosa de deportivos: es la forma más sencilla de sacar más fuerza de un motor pequeño. Aun así, pocos conductores saben qué hace esa pieza ni por qué conviene tratarla con cariño.
+Casi todos los autos nuevos, de gasolina o diésel, llevan turbo. Ya no es cosa de deportivos: es la forma más sencilla de sacar más fuerza de un motor pequeño. Aun así, pocos conductores saben qué hace esa pieza ni por qué conviene tratarla con cariño.
 
 ## La idea en una frase
 
@@ -30,7 +30,7 @@ El conjunto gira muy deprisa, por encima de las 100.000 vueltas por minuto en mu
 
 ## El famoso «lag»
 
-El turbo necesita gases de escape para girar, y a muy pocas revoluciones hay pocos. Por eso a veces se nota un pequeño retraso entre pisar el acelerador y sentir el empuje. Los fabricantes lo reducen con turbos más pequeños, de geometría variable, de doble entrada o con ayuda eléctrica, y en los coches actuales apenas se percibe.
+El turbo necesita gases de escape para girar, y a muy pocas revoluciones hay pocos. Por eso a veces se nota un pequeño retraso entre pisar el acelerador y sentir el empuje. Los fabricantes lo reducen con turbos más pequeños, de geometría variable, de doble entrada o con ayuda eléctrica, y en los autos actuales apenas se percibe.
 
 ## Cómo cuidarlo
 

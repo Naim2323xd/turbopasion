@@ -1,10 +1,10 @@
 {
   "siteName": "TurboPasión",
-  "tagline": "Las noticias del motor, al minuto",
-  "description": "TurboPasión reúne las últimas noticias del mundo del automóvil: lanzamientos, coches eléctricos, deportivos, SUV, competición e industria, actualizadas cada hora.",
+  "tagline": "Autos y motos en México, al día",
+  "description": "TurboPasión reúne las noticias de autos y motos en México: modelos que llegan al país, precios, financiamiento, eléctricos, SUV y pickups, e industria automotriz, actualizadas cada hora.",
   "siteUrl": "https://turbopasionmotor.com",
   "contactEmail": "contacto@tudominio.com",
-  "language": "es",
+  "language": "es-MX",
 
   "adsense": {
     "client": "",
@@ -19,49 +19,50 @@
 
   "itemsPerPage": 24,
   "maxPages": 8,
-  "maxPerSource": 25,
+  "maxPerSource": 30,
   "excerptLength": 170,
   "showImages": true,
 
   "feeds": [
-    { "name": "Motorpasión", "url": "https://www.motorpasion.com/index.xml" },
     { "name": "Motorpasión México", "url": "https://www.motorpasion.com.mx/index.xml" },
-    { "name": "Diariomotor", "url": "https://www.diariomotor.com/feed/" },
-    { "name": "Motor.es", "url": "https://www.motor.es/feed/" },
-    { "name": "Auto Bild", "url": "https://www.autobild.es/rss" },
-    { "name": "Motor1", "url": "https://es.motor1.com/rss/news/all/" },
-    { "name": "Car and Driver", "url": "https://www.caranddriver.com/es/rss/all.xml/" },
-    { "name": "Top Gear", "url": "https://www.topgear.es/rss" },
-    { "name": "Forococheseléctricos", "url": "https://forococheselectricos.com/feed" },
-    { "name": "Actualidad Motor", "url": "https://www.actualidadmotor.com/feed/" },
-    { "name": "Xataka", "url": "https://www.xataka.com/tag/coches/rss2.xml" }
+    { "name": "Autocosmos México", "url": "https://noticias.autocosmos.com.mx/rss" },
+    { "name": "Xataka México", "url": "https://www.xataka.com.mx/categoria/automovil/rss2.xml" },
+    { "name": "Reforma Automotriz", "url": "https://www.reforma.com/rss/automotriz.xml" },
+    { "name": "AutoDinámico", "url": "https://www.autodinamico.mx/feed/" },
+    { "name": "Revista Moto", "url": "https://www.revistamoto.com/wp_rm/feed/", "category": "motos" },
+    { "name": "Expomoto News", "url": "https://www.motociclo.com.mx/feed/", "category": "motos" }
   ],
 
   "categories": [
     {
-      "slug": "competicion",
-      "name": "Competición",
-      "keywords": ["f1", "formula 1", "formula e", "motogp", "rally", "wrc", "le mans", "dakar", "gran premio", "indycar", "nascar", "wec", "verstappen", "hamilton", "alonso", "sainz", "leclerc", "piloto", "parrilla", "pole"]
+      "slug": "motos",
+      "name": "Motos",
+      "keywords": ["moto", "motos", "motocicleta", "motocicletas", "motoneta", "motonetas", "scooter", "scooters", "italika", "vento", "bajaj", "ktm", "ducati", "harley", "harley-davidson", "royal enfield", "motociclista", "motociclistas", "biker", "motogp", "casco"]
+    },
+    {
+      "slug": "precios",
+      "name": "Precios y financiamiento",
+      "keywords": ["financiamiento", "financiar", "credito", "creditos", "enganche", "mensualidad", "mensualidades", "tasa", "tasas", "precio", "precios", "cuesta", "cuestan", "pesos", "mdp", "arrendamiento", "leasing", "seguro", "seguros", "tenencia", "isan", "refrendo", "buen fin", "oferta", "ofertas", "descuento", "descuentos", "promocion", "promociones", "bono", "seminuevo", "seminuevos", "usados"]
+    },
+    {
+      "slug": "lanzamientos",
+      "name": "Lanzamientos",
+      "keywords": ["llega a mexico", "llegan a mexico", "llegara a mexico", "llegaran a mexico", "llegada a mexico", "ya esta en mexico", "lanzamiento", "lanzamientos", "debuta", "debut", "estrena", "estreno", "presenta", "presentacion", "preventa", "nueva generacion", "revelado", "revelada", "primer vistazo", "confirmado", "confirmada", "2027", "2028"]
     },
     {
       "slug": "electricos",
-      "name": "Eléctricos",
-      "keywords": ["electrico", "electricos", "electrica", "electricas", "hibrido", "hibridos", "enchufable", "bateria", "baterias", "autonomia", "recarga", "cargador", "tesla", "byd", "kwh", "ev", "phev", "hidrogeno"]
-    },
-    {
-      "slug": "deportivos",
-      "name": "Deportivos",
-      "keywords": ["deportivo", "deportivos", "superdeportivo", "hiperdeportivo", "hypercar", "ferrari", "lamborghini", "porsche", "mclaren", "bugatti", "pagani", "koenigsegg", "aston martin", "gt3", "nurburgring", "v8", "v12", "cv"]
+      "name": "Eléctricos e híbridos",
+      "keywords": ["electrico", "electricos", "electrica", "electricas", "hibrido", "hibridos", "hibrida", "enchufable", "bateria", "baterias", "autonomia", "recarga", "cargador", "electrolinera", "tesla", "byd", "kwh", "phev", "hidrogeno", "electromovilidad"]
     },
     {
       "slug": "suv",
-      "name": "SUV y 4x4",
-      "keywords": ["suv", "todoterreno", "todocamino", "4x4", "pick-up", "pickup", "crossover", "camioneta", "off-road"]
+      "name": "SUV y pickups",
+      "keywords": ["suv", "suvs", "pick-up", "pickup", "pickups", "camioneta", "camionetas", "crossover", "4x4", "todoterreno", "off-road"]
     },
     {
       "slug": "industria",
       "name": "Industria",
-      "keywords": ["ventas", "fabrica", "fabricas", "aranceles", "arancel", "mercado", "dgt", "normativa", "multa", "multas", "radar", "radares", "impuesto", "matriculaciones", "despidos", "produccion", "gasolina", "diesel", "combustible", "itv", "seguro"]
+      "keywords": ["ventas", "amia", "amda", "inegi", "planta", "plantas", "armadora", "armadoras", "arancel", "aranceles", "produccion", "exportacion", "exportaciones", "t-mec", "nearshoring", "mercado", "verificacion", "hoy no circula", "multa", "multas", "gasolina", "diesel", "magna", "premium", "placas", "licencia", "reglamento", "llamado a revision"]
     }
   ],
   "defaultCategory": { "slug": "novedades", "name": "Novedades" }
