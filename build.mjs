@@ -195,6 +195,8 @@ async function loadPosts() {
 // ---------------------------------------------------------------- plantillas HTML
 
 const ads = cfg.adsense || {};
+const SOCIAL = (cfg.social || []).filter((r) => safeUrl(r.url));
+const socialLinks = () => SOCIAL.map((r) => `<a href="${esc(r.url)}" target="_blank" rel="noopener me">${esc(r.name)}</a>`).join(' ');
 
 function ad(slotName) {
   if (!ads.client) {
@@ -262,6 +264,8 @@ ${body}
       <a href="privacidad.html">Privacidad y cookies</a>
       <a href="aviso-legal.html">Aviso legal</a>
     </p>
+    ${SOCIAL.length ? `<p class="site-footer__links site-footer__social"><span class="muted">Síguenos:</span>
+      ${socialLinks()}</p>` : ""}
     <p class="muted">Última actualización: <time datetime="${BUILD_DATE.toISOString()}" data-full>${BUILD_DATE.toISOString()}</time> · © ${BUILD_DATE.getFullYear()} ${esc(cfg.siteName)}</p>
   </div>
 </footer>
@@ -396,7 +400,7 @@ ${grid(rest)}</section>`;
     title: p === 1 ? '' : `Noticias del motor, página ${p}`,
     file: p === 1 ? 'index.html' : `pagina-${p}.html`,
     body, ogImage: slice[0]?.image,
-    jsonLd: p === 1 ? { '@context': 'https://schema.org', '@type': 'WebSite', name: cfg.siteName, description: cfg.description, inLanguage: cfg.language, ...(SITE_URL ? { url: SITE_URL + '/' } : {}) } : null,
+    jsonLd: p === 1 ? { '@context': 'https://schema.org', '@type': 'WebSite', name: cfg.siteName, description: cfg.description, inLanguage: cfg.language, ...(SITE_URL ? { url: SITE_URL + '/' } : {}), ...(SOCIAL.length ? { sameAs: SOCIAL.map((r) => r.url) } : {}) } : null,
   }));
 }
 
@@ -473,7 +477,7 @@ const pages = {
   'contacto.html': ['Contacto', `
 <p>Puedes escribirnos a <a href="mailto:${mail}">${mail}</a> para:</p>
 <ul><li>Sugerencias y comentarios sobre el sitio.</li><li>Avisar de un error en un titular o enlace.</li><li>Solicitar la retirada de contenidos de tu medio.</li><li>Propuestas de publicidad y colaboración.</li></ul>
-<p>Respondemos lo antes posible.</p>`],
+<p>Respondemos lo antes posible.</p>${SOCIAL.length ? `<h2>Redes sociales</h2><ul>${SOCIAL.map((r) => `<li><a href="${esc(r.url)}" target="_blank" rel="noopener me">${esc(r.name)}</a>: ${esc(r.handle || "")}</li>`).join("")}</ul>` : ""}`],
   'privacidad.html': ['Política de privacidad y cookies', `
 <p>En ${esc(cfg.siteName)} respetamos tu privacidad. Esta página explica qué datos se tratan cuando visitas el sitio.</p>
 <h2>Datos que recogemos</h2>

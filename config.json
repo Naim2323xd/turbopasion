@@ -6,6 +6,11 @@
   "contactEmail": "contacto@tudominio.com",
   "language": "es-MX",
 
+  "social": [
+    { "name": "TikTok", "handle": "@turbopasionmx", "url": "https://www.tiktok.com/@turbopasionmx" },
+    { "name": "Instagram", "handle": "@turbopasion.mx", "url": "https://www.instagram.com/turbopasion.mx/" }
+  ],
+
   "adsense": {
     "client": "",
     "slots": {
