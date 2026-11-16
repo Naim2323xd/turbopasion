@@ -20,7 +20,7 @@
       "bottom": "",
       "article": ""
     },
-    "showPlaceholders": true
+    "showPlaceholders": false
   },
 
   "itemsPerPage": 24,

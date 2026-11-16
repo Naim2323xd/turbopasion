@@ -509,6 +509,9 @@ for (const [file, [title, html]] of Object.entries(pages)) {
   await write(file, layout({ title, file, body: staticPage(title, html) }));
 }
 
+// Página de error 404 (no entra en el sitemap)
+await writeFile(path.join(OUT, '404.html'), layout({ title: 'Página no encontrada', file: '404.html', body: staticPage('Página no encontrada', '<p>La página que buscas no existe o cambió de dirección.</p><p><a href="/">Volver a la portada</a> o revisa los artículos de <a href="/redaccion.html">la redacción</a>.</p>') }).replace('<link rel="stylesheet" href="style.css">', '<meta name="robots" content="noindex"><base href="/"><link rel="stylesheet" href="style.css">'), 'utf8');
+
 // robots.txt, sitemap.xml, ads.txt
 await write('robots.txt', `User-agent: *\nAllow: /\n${SITE_URL ? `Sitemap: ${SITE_URL}/sitemap.xml\n` : ''}`);
 if (SITE_URL) {
