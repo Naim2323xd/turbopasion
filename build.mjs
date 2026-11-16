@@ -156,6 +156,9 @@ function markdown(md) {
     if (/^[-*]\s+/.test(blk)) {
       return '<ul>' + blk.split('\n').map((l) => `<li>${inlineMd(l.replace(/^[-*]\s+/, ''))}</li>`).join('') + '</ul>';
     }
+    if (/^\d+\.\s+/.test(blk)) {
+      return '<ol>' + blk.split('\n').map((l) => `<li>${inlineMd(l.replace(/^\d+\.\s+/, ''))}</li>`).join('') + '</ol>';
+    }
     return `<p>${inlineMd(blk.replace(/\n/g, ' '))}</p>`;
   }).join('\n');
 }
@@ -203,11 +206,12 @@ function ad(slotName) {
 
 const FAVICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e10600'/%3E%3Cpath d='M14 18h36l-3 9H37l-7 21H19l7-21H11z' fill='%23fff'/%3E%3C/svg%3E";
 
-function layout({ title, description, file, active = '', body, ogImage = '' }) {
+function layout({ title, description, file, active = '', body, ogImage = '', ogType = 'website', jsonLd = null }) {
   const fullTitle = title ? `${title} | ${cfg.siteName}` : `${cfg.siteName} — ${cfg.tagline}`;
   const canonical = SITE_URL ? `${SITE_URL}/${file === 'index.html' ? '' : file}` : '';
   const nav = [{ slug: '', name: 'Portada', href: 'index.html' },
-    ...[...cfg.categories, cfg.defaultCategory].map((c) => ({ slug: c.slug, name: c.name, href: `cat-${c.slug}.html` }))];
+    ...[...cfg.categories, cfg.defaultCategory].map((c) => ({ slug: c.slug, name: c.name, href: `cat-${c.slug}.html` })),
+    { slug: 'redaccion', name: 'Redacción', href: 'redaccion.html' }];
   return `<!doctype html>
 <html lang="${esc(cfg.language)}">
 <head>
@@ -219,7 +223,13 @@ ${canonical ? `<link rel="canonical" href="${esc(canonical)}">` : ''}
 <meta property="og:site_name" content="${esc(cfg.siteName)}">
 <meta property="og:title" content="${esc(fullTitle)}">
 <meta property="og:description" content="${esc(description || cfg.description)}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="${esc(ogType)}">
+<meta property="og:locale" content="es_ES">
+${canonical ? `<meta property="og:url" content="${esc(canonical)}">` : ''}
+<meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}">
+<meta name="robots" content="max-image-preview:large">
+${SITE_URL ? `<link rel="alternate" type="application/rss+xml" title="${esc(cfg.siteName)}: artículos" href="${esc(SITE_URL)}/feed.xml">` : ''}
+${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>` : ''}
 ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">` : ''}
 <meta name="theme-color" content="#0d0f12">
 <link rel="icon" href="${FAVICON}">
@@ -372,7 +382,7 @@ for (let p = 1; p <= totalPages; p++) {
     body = `<h1 class="sr-only">${esc(cfg.siteName)}: ${esc(cfg.tagline)}</h1>
 ${card(hero, true)}
 ${ad('top')}
-${posts.length ? `<section><h2 class="section-title">De la redacción</h2><div class="grid grid--posts">${posts.slice(0, 3).map(postCard).join('\n')}</div></section>` : ''}
+${posts.length ? `<section><h2 class="section-title">De la redacción</h2><div class="grid grid--posts">${posts.slice(0, 3).map(postCard).join('\n')}</div>${posts.length > 3 ? `<p class="more"><a href="redaccion.html">Ver todos los artículos →</a></p>` : ''}</section>` : ''}
 <section><h2 class="section-title">Últimas noticias</h2>
 ${grid(rest)}</section>`;
   } else {
@@ -383,6 +393,7 @@ ${grid(rest)}</section>`;
     title: p === 1 ? '' : `Noticias del motor, página ${p}`,
     file: p === 1 ? 'index.html' : `pagina-${p}.html`,
     body, ogImage: slice[0]?.image,
+    jsonLd: p === 1 ? { '@context': 'https://schema.org', '@type': 'WebSite', name: cfg.siteName, description: cfg.description, inLanguage: cfg.language, ...(SITE_URL ? { url: SITE_URL + '/' } : {}) } : null,
   }));
 }
 
@@ -410,8 +421,39 @@ ${p.image ? `<figure><img src="${esc(p.image)}" alt=""></figure>` : ''}
 ${ad('article')}
 ${p.html}
 ${ad('bottom')}
-</article>`;
-  await write(`post-${p.slug}.html`, layout({ title: p.title, description: p.description, file: `post-${p.slug}.html`, body, ogImage: p.image }));
+</article>
+${posts.length > 1 ? `<section><h2 class="section-title">Más de la redacción</h2><div class="grid grid--posts">${posts.filter((o) => o !== p).slice(0, 3).map(postCard).join('\n')}</div></section>` : ''}`;
+  await write(`post-${p.slug}.html`, layout({
+    title: p.title, description: p.description, file: `post-${p.slug}.html`, active: 'redaccion', body, ogImage: p.image, ogType: 'article',
+    jsonLd: {
+      '@context': 'https://schema.org', '@type': 'Article', headline: p.title, description: p.description, inLanguage: cfg.language,
+      datePublished: p.date.toISOString(), dateModified: p.date.toISOString(),
+      author: { '@type': 'Organization', name: cfg.siteName }, publisher: { '@type': 'Organization', name: cfg.siteName },
+      ...(p.image ? { image: p.image } : {}),
+      ...(SITE_URL ? { mainEntityOfPage: `${SITE_URL}/post-${p.slug}.html` } : {}),
+    },
+  }));
+}
+
+// Índice de artículos propios
+await write('redaccion.html', layout({
+  title: 'De la redacción: guías y artículos',
+  description: `Guías, explicaciones y artículos propios de ${cfg.siteName} sobre el mundo del motor.`,
+  file: 'redaccion.html', active: 'redaccion',
+  body: `<h1 class="section-title">De la redacción</h1>
+<p class="muted">Guías, explicaciones y artículos escritos por ${esc(cfg.siteName)}.</p>
+${posts.length ? `<div class="grid grid--posts">${posts.map(postCard).join('\n')}</div>` : '<p class="muted">Pronto publicaremos aquí nuestros artículos.</p>'}
+${ad('bottom')}`,
+}));
+
+// Canal RSS de los artículos propios
+if (SITE_URL) {
+  await writeFile(path.join(OUT, 'feed.xml'), `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel>
+<title>${esc(cfg.siteName)}</title><link>${esc(SITE_URL)}/</link><description>${esc(cfg.description)}</description><language>${esc(cfg.language)}</language>
+${posts.slice(0, 30).map((p) => `<item><title>${esc(p.title)}</title><link>${esc(SITE_URL)}/post-${p.slug}.html</link><guid>${esc(SITE_URL)}/post-${p.slug}.html</guid><pubDate>${p.date.toUTCString()}</pubDate><description>${esc(p.description)}</description></item>`).join('\n')}
+</channel></rss>
+`, 'utf8');
 }
 
 // Páginas legales (necesarias para Google AdSense)
