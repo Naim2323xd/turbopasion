@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(ROOT, 'public');
 const cfg = JSON.parse(await readFile(path.join(ROOT, 'config.json'), 'utf8'));
-const SITE_URL = (process.env.SITE_URL || cfg.siteUrl || '').replace(/\/+$/, '');
+const SITE_URL = (cfg.siteUrl || process.env.SITE_URL || '').replace(/\/+$/, '');
 const BUILD_DATE = new Date();
 
 // ---------------------------------------------------------------- utilidades
