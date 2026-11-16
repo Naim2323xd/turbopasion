@@ -8,7 +8,8 @@
 
   "social": [
     { "name": "TikTok", "handle": "@turbopasionmx", "url": "https://www.tiktok.com/@turbopasionmx" },
-    { "name": "Instagram", "handle": "@turbopasion.mx", "url": "https://www.instagram.com/turbopasion.mx/" }
+    { "name": "Instagram", "handle": "@turbopasion.mx", "url": "https://www.instagram.com/turbopasion.mx/" },
+    { "name": "Facebook", "handle": "Turbo Pasión", "url": "https://www.facebook.com/profile.php?id=61553395141764" }
   ],
 
   "adsense": {
